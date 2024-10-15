@@ -15,9 +15,18 @@ const gameOverMessage = document.createElement('div');
 let lastClickedNumber = null; // śledzenie ostatnio klikniętej liczby
 let bestScore = 0; // przechowywanie najlepszego wyniku
 let clickTimeout; // zmienna do przechowywania timera
+let startTime; // czas rozpoczęcia reakcji
+let reactionTimeDisplay = document.getElementById('reaction-time');
+let bestReactionTimeDisplay = document.getElementById('best-reaction-time');
+let averageReactionTimeDisplay = document.getElementById('mid-reaction-time');
+
+let bestReactionTime = Infinity; // najlepszy czas reakcji
+let totalReactionTime = 0; // suma czasów reakcji
+let reactionCount = 0; // liczba reakcji
 
 function updateNumber() {
     numberDisplay.innerText = `Liczba: ${currentNumber}`;
+    startTime = Date.now(); // zapisz czas wyświetlenia liczby
     
     if (currentNumber % 7 === 0 || String(currentNumber).includes('7')) {
         dzik.classList.add('highlight');
@@ -26,7 +35,7 @@ function updateNumber() {
         clearTimeout(clickTimeout); // czyścimy poprzedni timer
         clickTimeout = setTimeout(() => {
             gameOver();
-        }, 2000); // 2 sekundy
+        }, 1001); // 2 sekundy
     } else {
         dzik.classList.remove('highlight');
     }
@@ -48,16 +57,27 @@ function startGame() {
     lastClickedNumber = null; // reset ostatnio klikniętej liczby
     scoreDisplay.innerText = `Wynik: ${score}`;
     startButton.disabled = true;
+    startButton.style.backgroundColor = "gray";
     interval = setInterval(updateNumber, speed);
     gameOverMessage.innerText = ''; // usuń komunikat o końcu gry
+
+    // Resetowanie czasów reakcji
+    bestReactionTime = Infinity;
+    totalReactionTime = 0;
+    reactionCount = 0;
+    bestReactionTimeDisplay.innerText = "Najlepszy czas reakcji: N/A";
+    averageReactionTimeDisplay.innerText = "Średni czas reakcji: N/A";
 }
 
 function gameOver() {
     clearInterval(interval);
     clearTimeout(clickTimeout); // czyścimy timer kliknięcia
     startButton.disabled = false;
+    gameOverMessage.style.color = "red";
+    gameOverMessage.style.fontSize = "30px";
     gameOverMessage.innerText = 'Game Over! Kliknij, aby rozpocząć od nowa.';
     document.getElementById('game').appendChild(gameOverMessage);
+    startButton.style.backgroundColor = "green";
     
     // Sprawdź i zaktualizuj najlepszy wynik
     if (score > bestScore) {
@@ -69,6 +89,8 @@ function gameOver() {
 }
 
 dzik.addEventListener('click', () => {
+    const reactionTime = Date.now() - startTime; // oblicz czas reakcji
+
     if (currentNumber > 1 && (currentNumber - 1) % 7 === 0 || String(currentNumber - 1).includes('7')) {
         if (lastClickedNumber === currentNumber) {
             gameOver(); // kończymy grę, jeśli kliknięto tę samą liczbę
@@ -77,7 +99,22 @@ dzik.addEventListener('click', () => {
             scoreDisplay.innerText = `Wynik: ${score}`;
             lastClickedNumber = currentNumber; // zapisz ostatnią klikniętą liczbę
             
-            clearTimeout(clickTimeout); // resetujemy timer po poprawnym kliknięciu
+            clearTimeout(clickTimeout); 
+
+            // Wyświetl czas reakcji
+            reactionTimeDisplay.innerHTML = `Ostatni czas reakcji: ${reactionTime} ms`;
+
+            // Aktualizuj najlepszy czas reakcji
+            if (reactionTime < bestReactionTime) {
+                bestReactionTime = reactionTime;
+                bestReactionTimeDisplay.innerHTML = `Najlepszy czas reakcji: ${bestReactionTime} ms`;
+            }
+
+            // Oblicz średni czas reakcji
+            totalReactionTime += reactionTime;
+            reactionCount++;
+            const averageReactionTime = totalReactionTime / reactionCount;
+            averageReactionTimeDisplay.innerHTML = `Średni czas reakcji: ${averageReactionTime.toFixed(2)} ms`;
         }
     } else {
         gameOver();
@@ -85,4 +122,3 @@ dzik.addEventListener('click', () => {
 });
 
 startButton.addEventListener('click', startGame);
-

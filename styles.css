@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #f0f0f0;
+    background-color: #bfffcd;
 }
 
 #dzik {
@@ -15,6 +15,22 @@ body {
 }
 
 #score {
+    margin-top:30px;
     font-size: 20px;
-    margin-top: 20px;
+}
+
+#start-button{
+    font-weight: bold;
+    color: white;
+    font-size: 18px;
+    border-radius: 12%;
+    border-color: white;
+    border-width: 7px;
+    height: 110px;
+    width: 140px;
+    background-color: green;
+}
+div
+{
+    margin:20px;
 }
