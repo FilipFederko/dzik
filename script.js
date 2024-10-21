@@ -8,7 +8,7 @@ const maxSpeed = 100; // minimalny czas na zmiany liczby
 
 const numberDisplay = document.getElementById('number-display');
 const scoreDisplay = document.getElementById('score');
-const bestScoreDisplay = document.getElementById('best-score'); // wyświetlanie najlepszego wyniku
+const bestScoreDisplay = document.getElementById('best-score');
 const startButton = document.getElementById('start-button');
 const dzik = document.getElementById('dzik');
 const gameOverMessage = document.createElement('div');
@@ -31,11 +31,13 @@ function updateNumber() {
     if (currentNumber % 7 === 0 || String(currentNumber).includes('7')) {
         dzik.classList.add('highlight');
         
-        // Ustaw timer na sprawdzenie, czy gracz kliknął w ciągu 2 sekund
+        // Ustaw timer na sprawdzenie, czy gracz kliknął w ciągu 1 sekundy
         clearTimeout(clickTimeout); // czyścimy poprzedni timer
         clickTimeout = setTimeout(() => {
-            gameOver();
-        }, 1001); // 2 sekundy
+            if (lastClickedNumber !== currentNumber) {
+                gameOver();
+            }
+        }, 1000); // 1 sekunda
     } else {
         dzik.classList.remove('highlight');
     }
@@ -65,8 +67,8 @@ function startGame() {
     bestReactionTime = Infinity;
     totalReactionTime = 0;
     reactionCount = 0;
-    bestReactionTimeDisplay.innerText = "Najlepszy czas reakcji: N/A";
-    averageReactionTimeDisplay.innerText = "Średni czas reakcji: N/A";
+    bestReactionTimeDisplay.innerText = "Najlepszy czas reakcji: ";
+    averageReactionTimeDisplay.innerText = "Średni czas reakcji: ";
 }
 
 function gameOver() {
@@ -100,7 +102,6 @@ dzik.addEventListener('click', () => {
             lastClickedNumber = currentNumber; // zapisz ostatnią klikniętą liczbę
             
             clearTimeout(clickTimeout); 
-
             // Wyświetl czas reakcji
             reactionTimeDisplay.innerHTML = `Ostatni czas reakcji: ${reactionTime} ms`;
 
