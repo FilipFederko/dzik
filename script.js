@@ -2,8 +2,8 @@ let score = 0;
 let currentNumber = 1;
 let interval;
 let speed = 1000;
-const speedIncrement = 0.7;
-const incrementThreshold = 20;
+const speedIncrement = 0.9;
+const incrementThreshold = 10;
 const maxSpeed = 100;
 
 const numberDisplay = document.getElementById('number-display');
@@ -29,15 +29,12 @@ function updateNumber() {
     startTime = Date.now();
     
     if (currentNumber % 7 === 0 || String(currentNumber).includes('7')) {
-        dzik.classList.add('highlight');
         clearTimeout(clickTimeout);
         clickTimeout = setTimeout(() => {
             if (lastClickedNumber !== currentNumber) {
                 gameOver();
             }
-        }, 1000);
-    } else {
-        dzik.classList.remove('highlight');
+        }, speed);
     }
 
     currentNumber++;
