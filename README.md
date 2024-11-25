@@ -1,3 +1,4 @@
+Projekt dwuosobowy
 https://filipfederko.github.io/dzik/index.html. 
 Projekt gry.
 Stworzyliśmy go w celu rozwinięcia naszych umiejętności korzystania z JavaScript'a.
